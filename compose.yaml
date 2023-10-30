@@ -1,0 +1,30 @@
+services:
+  testapp:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - testapp-net
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/testapp_db
+    depends_on:
+      - mysqldb
+
+    volumes:
+      - .m2:/root/.m2
+
+  mysqldb:
+    image: 'mysql:latest'
+    restart: always
+    ports:
+      - 3306:3306
+    networks:
+      - testapp-net
+    environment:
+      MYSQL_DATABASE: testapp_db
+      MYSQL_PASSWORD: test_user_password
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: test_user
+networks:
+  testapp-net:
